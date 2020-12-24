@@ -1,8 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <sstream>
-#include <algorithm>
+#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -21,7 +20,8 @@ int main() {
     vector<char> passchar;
 
     while(true) {
-        cin >> in;
+
+        getline(cin, in);
         if(in == "stop") {
             break;
         }
@@ -32,25 +32,25 @@ int main() {
 
     for(int i = 0; i < vin.size(); i++) {
 
-        cout << "is there an error here? we'll never know. thanks c++";
+        vector<string> colonSeparated = splitString(vin[i], ':');
+        vector<string> dashSeparated = splitString(colonSeparated[0], '-');
 
-        vector<string> separatedColon = splitString(vin[i], ':');
-        password.push_back(separatedColon[1]);
+        min.push_back(stoi(dashSeparated[0]));
 
-        vector<string> separatedDash = splitString(separatedColon[0], '-');
-        min.push_back(stoi(separatedDash[0]));
+        vector<string> spaceSeparated = splitString(dashSeparated[1], ' ');
 
-        vector<string> separatedSpace = splitString(separatedDash[1], ' ');
-        max.push_back(stoi(separatedSpace[0]));
-
-        char character = separatedSpace[1][0];
-
+        char character = spaceSeparated[1][0];
         passchar.push_back(character);
 
-        int occurrences = 0;
+        max.push_back(stoi(spaceSeparated[0]));
 
-        for(int j = 0; j < password[i].size(); j++) {
-            if(password[i][j] == character) {
+        password.push_back(colonSeparated[1]);
+
+        int occurrences = 0;
+        // count occurrences of a character
+        for(int j = 0; j < vin[i].size(); j++) {
+            
+            if(password[i][j] == passchar[i]) {
                 occurrences++;
             }
         }
@@ -60,14 +60,14 @@ int main() {
     }
 
     cout << validPasswords;
-    
+
     return 0;
 }
 vector<string> splitString(string input, char delimiter) {
     vector<string> tokens;
-    istringstream f(input);
+    stringstream check1(input);
     string buf;
-    while(getline(f, buf, delimiter)) {
+    while(getline(check1, buf, delimiter)) {
         tokens.push_back(buf);
     }
     return tokens;
