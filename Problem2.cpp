@@ -9,7 +9,7 @@ vector<string> splitString(string input, char delimiter);
 
 int main() {
 
-    string in; 
+    string line;
     vector<string> vin;
 
     int validPasswords = 0;
@@ -19,14 +19,16 @@ int main() {
     vector<int> max;
     vector<char> passchar;
 
-    while(true) {
+    while(getline(cin, line)) {
 
-        getline(cin, in);
-        if(in == "stop") {
+        if(line == "stop") {
+
             break;
         }
+
         else {
-            vin.push_back(in);
+
+            vin.push_back(line);
         }
     }
 
@@ -45,21 +47,22 @@ int main() {
         max.push_back(stoi(spaceSeparated[0]));
 
         password.push_back(colonSeparated[1]);
+    }
+    for(int j = 0; j < vin.size(); j++) {
 
         int occurrences = 0;
-        // count occurrences of a character
-        for(int j = 0; j < vin[i].size(); j++) {
-            
-            if(password[i][j] == passchar[i]) {
-                occurrences++;
+        for(int x = 0; x < password[j].size(); x++) {
+            string str = password[j];
+            if(str[x] == passchar[j]) {
+                occurrences = occurrences + 1;
             }
         }
-        if(occurrences >= min[i] && occurrences <= max[i]) {
-            validPasswords++;
+        if(occurrences >= min[j] && occurrences <= max[j]) {
+            validPasswords = validPasswords + 1;
         }
     }
-
-    cout << validPasswords;
+    
+    cout << validPasswords << endl;
 
     return 0;
 }
