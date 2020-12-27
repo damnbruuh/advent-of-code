@@ -21,7 +21,7 @@ int main() {
     int size = vin.size();
     int repeating = size * 3;
 
-    int rightslopecounter = 3;
+    int rightslopecounter = 0;
     int trees = 0;
 
     // for each line
@@ -35,7 +35,7 @@ int main() {
         if(vin[i][rightslopecounter] == '#') {
             trees++;
         }
-        rightslopecounter += 3;
+        rightslopecounter = rightslopecounter + 3;
     }
     cout << trees << endl;
     return 0;
