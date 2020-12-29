@@ -2,7 +2,7 @@
 #include <iterator>
 #include <iostream>
 #include <bits/stdc++.h>
-
+#include <string>
 using namespace std;
 
 vector<string> splitString(string input, char delimiter);
@@ -21,21 +21,28 @@ int main() {
     }
     vector<string> passport;
     for(int i = 0; i < vin.size(); i++) {
-        if(vin[i] != "\n") {
-            passport.push_back(vin[i]);
-        }
-        else {
-            // todo work with passport vector
+        if(vin[i] == "") {
+            // passport has ended
             string total;
+            int counter;
             for(int x = 0; x < passport.size(); x++) {
-                vector<string> tempsplit = splitString(passport[x], ' ');
-                for(int k = 0; k < tempsplit.size(); k++) {
-                    total += tempsplit[k];
+                total += " " + passport[x];
+            }
+            vector<string> properties = { "byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid" };
+            for(int k = 0; k < properties.size(); k++) {
+                if(total.find(properties[k]) != string::npos) {
+                    counter++;
                 }
             }
-
-            // determine if strtotal is valid
+            if(counter == 7) {
+                valid_passports++;
+            }
             passport.clear();
+
+            counter = 0;
+        }
+        else {
+            passport.push_back(vin[i]);
         }
     }
     cout << valid_passports << endl;
