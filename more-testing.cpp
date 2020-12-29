@@ -8,7 +8,7 @@ int main() {
 
     string str = "This is a string.";
 
-    int found = str.find("L");
+    int found = str.find("is");
 
     cout << found << endl;
 
