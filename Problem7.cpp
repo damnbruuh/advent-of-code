@@ -9,9 +9,11 @@
 
 using namespace std;
 
-vector<string> splitString(string input, string delimiter);
+vector<string> splitString(string input, char delimiter);
 
 bool findShinyGold(map<string, string> bmap, string key);
+
+string splitStringToken(string input, string delimit);
 
 int main() {
     string line;
@@ -38,14 +40,6 @@ int main() {
             mp.insert(pair<string, string>(split[0],split[1]));
         }
     }
-    map<string, string>::iterator it = mp.begin();
-    for(pair<string, string> element : mp) {
-        string key = element.first;
-        bool val = findShinyGold(map<string, string> mp, key);
-        if(val == true) {
-            bset.insert(key);
-        }
-    }
     cout << bset.size() << endl;
     return 0;
 }
@@ -56,7 +50,7 @@ bool findShinyGold(map<string, string> bmap, string key) {
     
 }
 
-vector<string> splitString(string input, string delimiter) {
+vector<string> splitString(string input, char delimiter) {
     vector<string> tokens;
     stringstream check1(input);
     string buf;
@@ -64,4 +58,8 @@ vector<string> splitString(string input, string delimiter) {
         tokens.push_back(buf);
     }
     return tokens;
+}
+
+string splitStringToken(string input, string delimit) {
+    return input.substr(0, input.find(delimit));
 }
