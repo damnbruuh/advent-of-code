@@ -4,8 +4,8 @@
 #include <bits/stdc++.h>
 #include <map>
 #include <algorithm>
-#include <iterator>
 #include <set>
+#include <regex>
 
 using namespace std;
 
@@ -13,31 +13,42 @@ vector<string> splitString(string input, char delimiter);
 
 bool findShinyGold(map<string, string> bmap, string key);
 
-string splitStringToken(string input, string delimit);
-
 int main() {
     string line;
     map<string, string> mp;
     set<string> bset;
+    vector<string> keys;
     string removeone[] = {"bag", "bags"};
-    char removetwo[] = {'1','2','3','4','5','6','7','8','9','10'};
+    char removetwo[] = {'1','2','3','4','5','6','7','8','9'};
     while(getline(cin, line)) {
         if(line == "stop") {
             break;
         }
         else {
-            for(int i = 0; i < sizeof(removeone)/sizeof(removeone[0]); i++) {
-                line.erase(remove(line.begin(), line.end(), removeone[i]), line.end());
+            for(int i = 0; i < 2; i++) {
+                // remove bag/bags
+                regex pattern(removeone[i]);
+                regex_replace(line, pattern, "");
             }
-            for(int k = 0; k < sizeof(removetwo)/sizeof(removetwo[0]); k++) {
+            for(int k = 0; k < 9; k++) {
+                // remove numbers
                 line.erase(remove(line.begin(), line.end(), removetwo[k]), line.end());
             }
-            vector<string> split = splitString(line, "contain");
-            size_t first = split[0].find_last_of(' ');
-            split[0] = split[0].substr(0, first);
-            replace(split[1].begin(), split[1].end(), '.', ' ');
-            split[0].push_back(' ');
-            mp.insert(pair<string, string>(split[0],split[1]));
+            size_t containpos = line.find("contain");
+            string splitzero = line.substr(0, containpos);
+            string splitone = line.substr(containpos + 7, line.length());
+            size_t first = splitzero.find_last_of(' ');
+            splitzero = splitzero.substr(0, first);
+            replace(splitone.begin(), splitone.end(), '.', ' ');
+            splitzero.push_back(' ');
+            keys.push_back(splitzero);
+            mp.insert(pair<string, string>(splitzero, splitone));
+        }
+    }
+    for(int x = 0; x < keys.size(); x++) {
+        bool val = findShinyGold(mp, keys[x]);
+        if(val == true) {
+            bset.insert(keys[x]);
         }
     }
     cout << bset.size() << endl;
@@ -45,9 +56,22 @@ int main() {
 }
 
 bool findShinyGold(map<string, string> bmap, string key) {
+    // TODO, fix control structure return error
     string elements = bmap[key];
-    vector<string> elementSplit = splitString(elements, ",");
-    
+    vector<string> elementSplit = splitString(elements, ',');
+    if(elements == "  no other bag") {
+        return false;
+    }
+    else {
+        if(elements.find("  shiny gold")) {
+            return true;
+        }
+        else {
+            for(int i = 0; i < elementSplit.size(); i++) {
+                return findShinyGold(bmap, elementSplit[i]);
+            }
+        }
+    }
 }
 
 vector<string> splitString(string input, char delimiter) {
@@ -58,8 +82,4 @@ vector<string> splitString(string input, char delimiter) {
         tokens.push_back(buf);
     }
     return tokens;
-}
-
-string splitStringToken(string input, string delimit) {
-    return input.substr(0, input.find(delimit));
 }
